@@ -1,11 +1,11 @@
 # Q-score evaluation on D-Wave solvers
 
-This repository contains python code to run the Q-score benchmark on five different D-Wave devices and solvers, namely its Advantage and 2000-Q QPU solvers, its Simulated Annealing and qbsolv classical solver and its hybrid solver. For an introduction to the Q-score, see below. The code allows running a single Max-Cut instance on each of the five solvers with different sizes and timeout limits. The code returns both the max cut result as the corresponding beta value. To compute the Q-score, one runs for increasing graph size sufficiently many instances of below code to check whether the average beta is larger than 0.2.
+This repository contains python code to run the Q-score benchmark on five different D-Wave devices and solvers, namely its Advantage and 2000-Q QPU solvers, its Simulated Annealing and qbsolv classical solver and its hybrid solver. For an introduction to the Q-score, see below. The code allows running a single Max-Cut instance on each of the five solvers with different sizes and timeout limits. The code returns both the Max-Cut result as the corresponding beta value. If no result is found within the allowed time limit, no Max-Cut result and a beta value of 0 are returned. Note that for the QPU solvers, the time limit considers embedding time only. The actual computation time will be slightly higher, but this difference will be in the order of milliseconds and will hence not influence the results. To compute the Q-score, one runs for increasing graph size sufficiently many instances of given code to check whether the average beta is larger than 0.2.
 
 This code was used to obtain results for the paper: "Evaluating the Q-score of quantum annealers", Ward van der Schoot et al. (IEEE QSW 2022).
 
 ## Set up D-Wave configuration
-To use this code, we assume that users have created a D-Wave Leap account and configured access to D-Wave's solvers correctly. To make an account, please visit https://cloud.dwavesys.com/leap/login/?next=/leap/ and to configure access to the solvers correctly, please visit https://docs.ocean.dwavesys.com/en/stable/overview/sapi.html.
+To use this code, we assume the reader has created a D-Wave Leap account and configured access to D-Wave's solvers correctly. To make an account, please visit https://cloud.dwavesys.com/leap/login/?next=/leap/ and to configure access to the solvers correctly, please visit https://docs.ocean.dwavesys.com/en/stable/overview/sapi.html.
 
 ## Usage
 The Q-score evaluation can be ran as follows:
