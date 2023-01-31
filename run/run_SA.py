@@ -1,11 +1,11 @@
 """
-Run a Max-Cut instance on the D-Wave Simulated Annealing solver.
+Run a Q-score instance on the D-Wave Simulated Annealing solver.
 """
 
 import time
 from collections import defaultdict
 from functools import partial
-from typing import Tuple
+from typing import Optional
 
 import neal
 import numpy as np
@@ -13,17 +13,20 @@ from dwave.embedding.chain_strength import uniform_torque_compensation
 
 
 def run_SA(
-    Q: defaultdict(int), timeout: int, size: int, num_reads: int
-) -> Tuple[float]:
+    Q: defaultdict(int), size: int, num_reads: int, timeout: Optional[int] = None
+) -> float:
     """
-    Function that solves a Max-Cut instance on the D-Wave Simulated Annealing solvers
+    Function that solves a Q-score instance on the D-Wave Simulated Annealing solver.
 
-    :param Q: QUBO-formulation of Max-Cut instance.
-    :param timeout: timeout parameter.
-    :param size: Problem size.
-    :param num_reads: Number of states to be read from solver.
+    Args:
+        Q: QUBO-formulation of Q-score instance.
+        size: Problem size.
+        num_reads: Number of states to be read from solver.
+        timeout: timeout parameter.
 
-    :return: The largest found cut and the corresponding value of beta.
+    Returns:
+        The largest found objective value. If no solution is found within the provided
+        timeout limit, np.nan is being returned.
     """
     start = time.time()
 
@@ -33,16 +36,14 @@ def run_SA(
         Q,
         chain_strength=chain_strength,
         num_reads=num_reads,
-        label=f"Maximum Cut {size:2d}",
+        label=f"Problem-{size:2d}",
     )
 
-    max_cut_result = -sampleset.first.energy
-    random_score = size ** 2 / 8
-    beta = (max_cut_result - random_score) / (0.178 * pow(size, 3 / 2))
+    objective_result = -sampleset.first.energy
 
     time_taken = time.time() - start
-    if time_taken > timeout:
-        print("failed to find a cut within timeout limit")
-        max_cut_result = np.nan
-        beta = 0
-    return max_cut_result, beta
+    if timeout is not None and time_taken > timeout:
+        print("Failed to find a solution within timeout limit.")
+        objective_result = np.nan
+
+    return objective_result
