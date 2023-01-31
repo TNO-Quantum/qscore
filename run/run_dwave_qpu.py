@@ -1,10 +1,10 @@
 """
-Run a Max-Cut instance on a D-Wave QPU solver.
+Run a Q-score instance on a D-Wave QPU solver.
 """
 
 from collections import defaultdict
 from functools import partial
-from typing import Tuple
+from typing import Optional
 
 import dimod
 import numpy as np
@@ -14,23 +14,26 @@ from dwave.system.samplers import DWaveSampler
 from minorminer import find_embedding
 
 
-def run_qpu(
+def run_dwave_qpu(
     Q: defaultdict(int),
-    timeout: int,
     size: int,
     solver: str,
     num_reads: int = 1000,
-) -> Tuple[float]:
+    timeout: Optional[int] = None,
+) -> float:
     """
-    Function that solves a Max-Cut instance on D-Wave QPU solvers.
+    Function that solves a Q-score instance on D-Wave QPU solvers.
 
-    :param Q: QUBO-formulation of Max-Cut instance.
-    :param timeout: timeout parameter.
-    :param size: Problem size.
-    :param solver: QPU solver to be used.
-    :param num_reads: Number of states to be read from solver.
+    Args:
+        Q: QUBO-formulation of Q-score instance.
+        size: Problem size.
+        solver: QPU solver to be used.
+        num_reads: Number of states to be read from solver.
+        timeout: timeout parameter.
 
-    :return: The largest found cut and the corresponding value of beta.
+    Returns:
+        The largest found objective value. If no embedding can be found
+          np.nan is being returned.
     """
     chain_strength = partial(uniform_torque_compensation, prefactor=2)
     sampler = DWaveSampler(solver=solver)
@@ -39,10 +42,12 @@ def run_qpu(
         bqm = dimod.BQM.from_qubo(Q)
         source_edgelist = list(bqm.quadratic) + [(v, v) for v in bqm.linear]
         target_graph = sampler.to_networkx_graph()
+        if timeout is None:
+            timeout = 1000  # use default minorminer value
         embedding = find_embedding(source_edgelist, target_graph, timeout=timeout)
     except:  # No embedding can be found
         print("Failed to find embedding.")
-        return np.nan, np.nan
+        return np.nan
 
     # Apply embedding and sample
     sampler_embedded = FixedEmbeddingComposite(DWaveSampler(solver=solver), embedding)
@@ -51,11 +56,8 @@ def run_qpu(
         Q,
         chain_strength=chain_strength,
         num_reads=num_reads,
-        label=f"Maximum Cut {size:2d}",
+        label=f"Problem-{size:2d}",
     )
-    max_cut_result = -sampleset.first.energy
+    objective_result = -sampleset.first.energy
 
-    random_score = size**2 / 8
-    beta = (max_cut_result - random_score) / (0.178 * pow(size, 3 / 2))
-
-    return max_cut_result, beta
+    return objective_result
