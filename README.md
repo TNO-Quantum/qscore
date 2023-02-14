@@ -14,7 +14,7 @@ Q-score instances for Max-Cut or Max-Clique optimization problem can be run for 
 This code was used to obtain results for the following papers:
 
 - ["Evaluating the Q-score of quantum annealers", Ward van der Schoot et al. (IEEE QSW 2022)](https://ieeexplore.ieee.org/document/9860191).
-- "Q-score Max-Clique: The first metric evaluation on multiple computational paradigms", Ward van der Schoot et al. (unpublished)
+- ["Q-score Max-Clique: The first metric evaluation on multiple computational paradigms", Ward van der Schoot et al. (preprint)](https://arxiv.org/abs/2302.00639)
 
 ## Q-score introduction
 
