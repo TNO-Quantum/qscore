@@ -4,17 +4,19 @@
 
 This repository contains python code to run the Q-score (Max-Cut and Max-Clique) benchmark on the following solver backends:
 
-- D-Wave devices and solvers, precisely its `Advantage_system4.1` and `DW_2000Q_6` QPU solvers, its `Simulated Annealing` and `qbsolv` classical solver, and its `hybrid` solver.
+- D-Wave QPU device, the `Advantage_system4.1` ~~and `DW_2000Q_6`~~ QPU system. (The `DW_2000Q_6` device no longer available.)
+- D-Wave classical solvers, its `Simulated Annealing` and `qbsolv` solver
+- D-Wave hybrid solver.
 - Gate-based hardware using QAOA on QuantumInspire and IBM hardware or simulators.
-- Simulator for Gaussian Boson Sampling, a form of photonic quantum computing.   
+- Gaussian Boson Sampling, a form of photonic quantum computing, both simulated an using the 12-mode Quandela QPU.   
 
 For an introduction to the Q-score, see the reference below.
-Q-score instances for Max-Cut or Max-Clique optimization problem can be run for different sizes and timeout limits. If no result is found within the allowed time limit, no objective result and a beta value of `0` is returned. Note that for the QPU solvers, the time limit considers embedding time only. The actual computation time will be slightly higher, but this difference will be in the order of milliseconds and will hence not influence the results. For similar reasons, for the photonic simulator, we only apply the time constraint to the classical runtime of the algorithm. To compute the Q-score, one runs for increasing graph size sufficiently many instances of the given code to check whether the average beta is larger than 0.2.
+Q-score instances for Max-Cut or Max-Clique optimization problem can be run for different sizes and timeout limits. If no result is found within the allowed time limit, no objective result and a beta value of `0` is returned. Note that for the QPU solvers, the time limit considers embedding time only. The actual computation time will be slightly higher, but this difference will be in the order of milliseconds and will hence not influence the results. For similar reasons, for the photonic simulator, we only apply the time constraint to the classical runtime of the algorithm. To compute the Q-score, one runs for increasing graph size sufficiently many instances of the given code to check whether the average beta is larger than `0.2`.
 
 This code was used to obtain results for the following papers:
 
 - ["Evaluating the Q-score of quantum annealers", Ward van der Schoot et al. (IEEE QSW 2022)](https://ieeexplore.ieee.org/document/9860191).
-- ["Q-score Max-Clique: The first metric evaluation on multiple computational paradigms", Ward van der Schoot et al. (preprint)](https://arxiv.org/abs/2302.00639)
+- ["Q-score Max-Clique: The first metric evaluation on multiple computational paradigms", Ward van der Schoot et al. (2023 arXiv)](https://arxiv.org/abs/2302.00639)
 
 ## Q-score introduction
 
@@ -63,7 +65,7 @@ Multiple Q-score instances for various sizes can be run as follows:
 
 To use this code we assume that the reader has installed the requirements and set up access to the required solvers. 
 
-Requirements can be installed using pip:
+Requirements can be installed using pip and have been tested for `python3.9` and `python3.10`:
 ```terminal
 python -m pip install -r requirements.txt
 ```
@@ -107,4 +109,14 @@ IBMQ.save_account('MY_API_TOKEN')
 Example usage for the IBM Lima device:
 ```python
 python evaluate.py -p "max-clique" -s 5 -t 60 -n 1024 -solver "QAOA" -provider "ibm" -backend "ibmq_lima" 
+```
+
+### Set up Quandela configuration
+
+To use the Quandela hardware backend, one need to create and Quandela Cloud account, which can be done [here](https://cloud.quandela.com/webide/login). 
+After creating your account you can store your API key inside the `configuration/_QUANDELA_API_KEY`:
+
+Example usage for the photonic Quandela Ascella hardware:
+```python
+python evaluate.py -p "max-clique" -s 3 -t 60 -n 1024 -solver "Photonic_quandela" -backend "qpu:ascella" 
 ```

@@ -13,6 +13,7 @@ from qiskit_optimization.applications import Clique, Maxcut
 from run.run_dwave_qpu import run_dwave_qpu
 from run.run_hybrid import run_hybrid
 from run.run_photonic_simulated import run_photonic_simulated
+from run.run_photonic_quandela import run_photonic_quandela
 from run.run_QAOA import run_QAOA
 from run.run_qbsolv import run_qbsolv
 from run.run_SA import run_SA
@@ -69,7 +70,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-provider",
         "--provider",
-        help="Name of hardware provider in case QAOA is selected.",
+        help="Name of hardware provider in case `QAOA` is selected.",
         choices=[
             "local simulator",
             "ibm",
@@ -81,7 +82,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-backend",
         "--backend",
-        help="Name of backend in case QAOA is selected.",
+        help="Name of backend in case `QAOA` or `Photonic_quandela` is selected.",
         type=str,
         required=False,
     )
@@ -91,11 +92,11 @@ def parse_args() -> argparse.Namespace:
         help="String of the D-Wave solver.",
         choices=[
             "Advantage_system4.1",
-            "DW_2000Q_6",
             "hybrid",
             "qbsolv",
             "Simulated_Annealing",
             "Photonic_Simulation",
+            "Photonic_quandela",
             "QAOA",
         ],
         type=str,
@@ -127,7 +128,7 @@ def main(
         seed: random seed for reproducibility.
         num_reads: Number of reads/samples in case of a QPU or Simulated Annealing solver.
         provider: Name of hardware provider in case QAOA is selected.
-        backend: Name of backend in case QAOA is selected.
+        backend: Name of backend in case QAOA or photonic is selected.
 
     Returns:
         objective_result: solution to max-cut or max-clique.
@@ -142,16 +143,15 @@ def main(
     """
     if num_reads is None and solver in [
         "Advantage_system4.1",
-        "DW_2000Q_6",
         "Simulated_Annealing",
         "Photonic_Simulation",
+        "Photonic_quandela",
     ]:
         raise ValueError("num_reads has not been submitted while required by solver.")
 
     if seed is None:
         seed = np.random.randint(100000)
     G = nx.erdos_renyi_graph(size, 1 / 2, seed=seed)
-
     if solver == "QAOA":
         if problem_type == "max-cut":
             max_cut = Maxcut(G)
@@ -163,14 +163,20 @@ def main(
         start_time = time.time()
         objective_result = run_QAOA(qp, provider, backend)
         end_time = time.time()
-    elif solver == "Photonic_Simulation":
+    elif solver in ["Photonic_Simulation", "Photonic_quandela"]:
         if problem_type != "max-clique":
             raise ValueError(
-                "Photonic simulation solver can only be used for Max-Clique problem."
+                "Photonic solvers can only be used for Max-Clique problems."
             )
-        objective_result, end_time, start_time = run_photonic_simulated(
-            G, size=size, n_samples=num_reads, timeout=timeout
-        )
+
+        if solver == "Photonic_Simulation":
+            objective_result, end_time, start_time = run_photonic_simulated(
+                G, size=size, n_samples=num_reads, timeout=timeout
+            )
+        elif solver == "Photonic_quandela":
+            objective_result, end_time, start_time = run_photonic_quandela(
+                G, size=size, backend=backend, n_samples=num_reads, timeout=timeout
+            )
     else:
         # Create qubo:
         if problem_type == "max-cut":
@@ -183,7 +189,7 @@ def main(
             )
 
         # Solve problem instance
-        if solver in ["Advantage_system4.1", "DW_2000Q_6"]:
+        if solver == "Advantage_system4.1":
             start_time = time.time()
             objective_result = run_dwave_qpu(Q, size, solver, num_reads, timeout)
             end_time = time.time()

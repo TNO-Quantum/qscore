@@ -1,9 +1,31 @@
+# generic dependencies
 numpy==1.22.1
 networkx==2.8.8
-dwave-ocean-sdk==4.4.0
-strawberryfields==0.23.0
 matplotlib==3.5.2
-qiskit[optimization]==0.39.4
-quantuminspire==2.0.0
+
+# d-wave dependencies
+dwave-cloud-client==0.9.3
+dwave-greedy==0.2.2
+dwave-hybrid==0.6.5
+dwave-inspector==0.2.9
+dwave-neal==0.5.9
+dwave-networkx==0.8.11
+dwave-ocean-sdk==4.4.0
+dwave-preprocessing==0.3.2
+dwave-qbsolv==0.3.4
+dwave-system==1.12.0
+dwave-tabu==0.4.3
+dwavebinarycsp==0.1.4
+pydantic==1.10.4
+
+# photonic dependencies
+strawberryfields==0.23.0
+perceval-quandela==0.8.1
 python-dotenv==0.21.0
+
+# qaoa dependencies
+qiskit[optimization]==0.39.4
+quantuminspire==2.2.1
+
+# testing dependencies
 pytest==7.2.1

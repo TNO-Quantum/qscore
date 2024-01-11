@@ -70,7 +70,8 @@ def calculate_qscore(
     for size in size_range:
         result, times = [], []
         exact_results = []
-        for _ in range(nb_instances_per_size):
+        for i in range(nb_instances_per_size):
+            print(f"START INSTANCE {i}")
             objective_result, _, time, G = main(
                 problem_type=problem_type,
                 size=size,
