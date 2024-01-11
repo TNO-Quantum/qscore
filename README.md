@@ -5,7 +5,7 @@
 This repository contains python code to run the Q-score (Max-Cut and Max-Clique) benchmark on the following solver backends:
 
 - D-Wave QPU device, the `Advantage_system4.1` ~~and `DW_2000Q_6`~~ QPU system. (The `DW_2000Q_6` device no longer available.)
-- D-Wave classical solvers, its `Simulated Annealing` and `qbsolv` solver
+- D-Wave classical solvers, its `Simulated Annealing` and ~~`qbsolv`~~ `Tabu` solver. (The `qbsolv` package is deprecated, but remains available in previous version.)
 - D-Wave hybrid solver.
 - Gate-based hardware using QAOA on QuantumInspire and IBM hardware or simulators.
 - Gaussian Boson Sampling, a form of photonic quantum computing, both simulated an using the 12-mode Quandela QPU.   
@@ -71,7 +71,7 @@ python -m pip install -r requirements.txt
 ```
 
 ### Set up D-Wave configuration
-To use the quantum annealing, simulated annealing, qbsolv or hybrid solver, we assume the reader has created a D-Wave Leap account and configured access to D-Wave's solvers correctly. To make an account, please visit the [website of D-wave](https://cloud.dwavesys.com/leap/login/?next=/leap/). To configure access to the solvers, please visit [these instructions](https://docs.ocean.dwavesys.com/en/stable/overview/sapi.html).
+To use the quantum annealing or hybrid solvers we assume the reader has created a D-Wave Leap account and configured access to D-Wave's solvers correctly. To make an account, please visit the [website of D-wave](https://cloud.dwavesys.com/leap/login/?next=/leap/). To configure access to the solvers, please visit [these instructions](https://docs.ocean.dwavesys.com/en/stable/overview/sapi.html).
 
 Example usage for the `Advantage_system4.1` QPU solver:
 

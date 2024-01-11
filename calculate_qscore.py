@@ -71,7 +71,6 @@ def calculate_qscore(
         result, times = [], []
         exact_results = []
         for i in range(nb_instances_per_size):
-            print(f"START INSTANCE {i}")
             objective_result, _, time, G = main(
                 problem_type=problem_type,
                 size=size,
@@ -110,15 +109,15 @@ def calculate_qscore(
 
 if __name__ == "__main__":
     # Input arguments
-    _NB_INSTANCES_PER_SIZE = 10
-    _SIZE_RANGE = list(range(5, 150, 5))
-    FILE_NAME = "Adv_few_instances.json"
-    INCLUDE_EXACT_RESULTS = True
-    PROBLEM_TYPE = "max-clique"
+    _NB_INSTANCES_PER_SIZE = 1
+    _SIZE_RANGE = list(range(90000,20000, 1000))
+    FILE_NAME = "tabu.json"
+    INCLUDE_EXACT_RESULTS = False
+    PROBLEM_TYPE = "max-cut"
     TIMEOUT = 60
-    SOLVER = "Advantage_system4.1"
-    _SEED = 1012134
-    NUM_READS = 1024
+    SOLVER = "tabu"
+    _SEED = 101200
+    NUM_READS = None
     PROVIDER = None
     BACKEND = None
 

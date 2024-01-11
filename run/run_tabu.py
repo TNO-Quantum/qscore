@@ -1,18 +1,17 @@
 """
-Run a Q-score instance on the D-Wave qbsolv solver.
+Run a Q-score instance using the D-Wave Tabu solver.
 """
-
 import time
 from collections import defaultdict
 from typing import Optional
 
 import numpy as np
-from dwave_qbsolv import QBSolv
+from tabu import TabuSampler
 
 
-def run_qbsolv(Q: defaultdict(int), size: int, timeout: Optional[int] = None) -> float:
+def run_tabu(Q: defaultdict(int), size: int, timeout: Optional[int] = None) -> float:
     """
-    Function that solves a Q-score instance on the D-Wave qbsolv solver.
+    Function that solves a Q-score instance on the D-Wave tabu solver.
 
     Args:
         Q: QUBO-formulation of Q-score instance.
@@ -25,7 +24,7 @@ def run_qbsolv(Q: defaultdict(int), size: int, timeout: Optional[int] = None) ->
     """
     start = time.time()
 
-    sampler = QBSolv()
+    sampler = TabuSampler()
     sampleset = sampler.sample_qubo(Q, label=f"Problem-{size:2d}")
 
     objective_result = -sampleset.first.energy
