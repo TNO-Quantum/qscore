@@ -15,7 +15,7 @@ from run.run_hybrid import run_hybrid
 from run.run_photonic_simulated import run_photonic_simulated
 from run.run_photonic_quandela import run_photonic_quandela
 from run.run_QAOA import run_QAOA
-from run.run_qbsolv import run_qbsolv
+from run.run_tabu import run_tabu
 from run.run_SA import run_SA
 from utils.max_clique import calculate_beta_max_clique, create_qubo_max_clique
 from utils.max_cut import calculate_beta_max_cut, create_qubo_max_cut
@@ -93,7 +93,7 @@ def parse_args() -> argparse.Namespace:
         choices=[
             "Advantage_system4.1",
             "hybrid",
-            "qbsolv",
+            "tabu",
             "Simulated_Annealing",
             "Photonic_Simulation",
             "Photonic_quandela",
@@ -201,9 +201,9 @@ def main(
             start_time = time.time()
             objective_result = run_SA(Q, size, num_reads, timeout)
             end_time = time.time()
-        elif solver == "qbsolv":
+        elif solver == "tabu":
             start_time = time.time()
-            objective_result = run_qbsolv(Q, size, timeout)
+            objective_result = run_tabu(Q, size, timeout)
             end_time = time.time()
         else:
             raise NotImplementedError(f"Provided Solver {solver} is not implemented")

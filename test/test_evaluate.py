@@ -11,7 +11,7 @@ from evaluate import main
     [
         "Advantage_system4.1",
         "hybrid",
-        "qbsolv",
+        "tabu",
         "Simulated_Annealing",
         "QAOA",
     ],
@@ -25,7 +25,7 @@ def test_evaluate_main_max_cut(solver):
     [
         "Advantage_system4.1",
         "hybrid",
-        "qbsolv",
+        "tabu",
         "Simulated_Annealing",
         "Photonic_Simulation",
         "Photonic_quandela",

@@ -10,8 +10,8 @@ from run.run_hybrid import run_hybrid
 from run.run_photonic_quandela import run_photonic_quandela
 from run.run_photonic_simulated import run_photonic_simulated
 from run.run_QAOA import run_QAOA
-from run.run_qbsolv import run_qbsolv
 from run.run_SA import run_SA
+from run.run_tabu import run_tabu
 from utils.max_cut import create_qubo_max_cut
 
 size, timeout = 4, None
@@ -23,8 +23,8 @@ def test_dwave_qpu_advantage():
     run_dwave_qpu(Q, size, solver="Advantage_system4.1", num_reads=1000, timeout=None)
 
 
-def test_qbsolv():
-    run_qbsolv(Q, size, timeout=None)
+def test_tabu():
+    run_tabu(Q, size, timeout=None)
 
 
 def test_SA():
