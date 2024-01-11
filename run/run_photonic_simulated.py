@@ -3,7 +3,7 @@ Run a Q-score instance on the photonic simulated solver.
 """
 
 import time
-from typing import Optional
+from typing import Optional, Tuple
 
 import networkx as nx
 import numpy as np
@@ -13,7 +13,7 @@ from strawberryfields.apps import clique, sample
 
 def run_photonic_simulated(
     G: Graph, size: int, n_samples: int, timeout: Optional[int] = None
-):
+) -> Tuple[float, float, float]:
     """
     Function that solves a Q-score instance on a photonic simulator.
     Can only be used for Max-Clique problem instances.

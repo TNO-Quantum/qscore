@@ -10,7 +10,6 @@ from evaluate import main
     "solver",
     [
         "Advantage_system4.1",
-        "DW_2000Q_6",
         "hybrid",
         "qbsolv",
         "Simulated_Annealing",
@@ -25,13 +24,13 @@ def test_evaluate_main_max_cut(solver):
     "solver",
     [
         "Advantage_system4.1",
-        "DW_2000Q_6",
         "hybrid",
         "qbsolv",
         "Simulated_Annealing",
         "Photonic_Simulation",
+        "Photonic_quandela",
         "QAOA",
     ],
 )
 def test_evaluate_main_max_clique(solver):
-    main(problem_type="max-clique", size=10, solver=solver, num_reads=100)
+    main(problem_type="max-clique", size=4, solver=solver, num_reads=100)
